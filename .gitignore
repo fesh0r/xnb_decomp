@@ -1,0 +1,6 @@
+*~
+*.bak
+*.suo
+*.user
+XNBDecomp/bin
+XNBDecomp/obj

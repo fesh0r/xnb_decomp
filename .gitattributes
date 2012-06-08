@@ -1,0 +1,15 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# bat/shell files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# source
+*.cs text
+*.config text
+*.csproj text
+*.sln text eol=crlf filter=utf8bom
+
+# binaries
+*.xnb binary
