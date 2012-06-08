@@ -75,7 +75,8 @@ namespace XNBDecomp
             {
                 int compressedTodo = fileSize - XnbCompressedPrologueSize;
                 fileSize = reader.ReadInt32();
-                input = new DecompressStreamNative(input, compressedTodo, fileSize);
+                //input = new DecompressStreamNative(input, compressedTodo, fileSize);
+                input = DecompressStream.getStream(input, compressedTodo, fileSize);
             }
             else
             {
