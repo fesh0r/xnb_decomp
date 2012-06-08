@@ -3,14 +3,14 @@ using System.IO;
 
 namespace XNBDecomp
 {
-    internal static class DecompressStream
+    internal static class DecompressStreamOld
     {
         public static Stream getStream(Stream baseStream, int compressedTodo, int decompressedTodo)
         {
             byte[] inBuf = new byte[0x10000];
             byte[] outBuf = new byte[0x10000];
 
-            LzxDecoder dec = new LzxDecoder(16);
+            LzxDecoderOld dec = new LzxDecoderOld(16);
 
             MemoryStream decompressedStream = new MemoryStream(decompressedTodo);
 
@@ -21,6 +21,7 @@ namespace XNBDecomp
 
             while (pos < compressedTodo)
             {
+                baseStream.Seek(pos + origin, SeekOrigin.Begin);
                 int flag, hi, lo, frame_size, block_size;
                 flag = (byte)baseStream.ReadByte();
                 if (flag == 0xFF)
@@ -47,14 +48,7 @@ namespace XNBDecomp
                     break;
                 }
 
-                if (block_size > 0x10000 || frame_size > 0x10000)
-                {
-                    throw new InvalidOperationException("Error decompressing content data.");
-                }
-
-                baseStream.Read(inBuf, 0, block_size);
-                dec.Decompress(outBuf, frame_size, inBuf, block_size);
-                decompressedStream.Write(outBuf, 0, frame_size);
+                dec.Decompress(baseStream, block_size, decompressedStream, frame_size);
 
                 pos += block_size;
                 decodedBytes += frame_size;

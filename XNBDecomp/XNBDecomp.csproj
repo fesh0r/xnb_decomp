@@ -46,7 +46,9 @@
     <Compile Include="ContentWriter.cs" />
     <Compile Include="DecompressStream.cs" />
     <Compile Include="DecompressStreamNative.cs" />
+    <Compile Include="DecompressStreamOld.cs" />
     <Compile Include="LzxDecoder.cs" />
+    <Compile Include="LzxDecoderOld.cs" />
     <Compile Include="XnaNativeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
