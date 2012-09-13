@@ -91,7 +91,6 @@ namespace XNBDecomp
             }
 
             Console.WriteLine("Done!");
-            Console.ReadLine();
             return 0;
         }
     }
