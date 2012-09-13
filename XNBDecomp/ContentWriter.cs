@@ -45,14 +45,7 @@ namespace XNBDecomp
                 this.graphicsProfile = 0;
             }
 
-            if (fileVersion >= XnbVersion_30)
-            {
-                this.compressContent = compressContent;
-            }
-            else
-            {
-                this.compressContent = false;
-            }
+            this.compressContent = false;
 
             base.OutStream = this.contentData;
         }
@@ -92,14 +85,7 @@ namespace XNBDecomp
 
             this.Write(this.filePlatform);
 
-            if (this.compressContent)
-            {
-                this.WriteCompressedOutput();
-            }
-            else
-            {
-                this.WriteUncompressedOutput();
-            }
+            this.WriteUncompressedOutput();
         }
 
         private void WriteUncompressedOutput()
@@ -110,37 +96,6 @@ namespace XNBDecomp
             this.Write((int)(XnbPrologueSize + contentLength));
 
             base.OutStream.Write(this.contentData.GetBuffer(), 0, contentLength);
-        }
-
-        private void WriteCompressedOutput()
-        {
-            this.WriteVersionNumber();
-
-            this.Write(0);
-            int contentLength = (int)this.contentData.Length;
-            this.Write(contentLength);
-
-            using (CompressorNative compressor = new CompressorNative(base.OutStream))
-            {
-                compressor.Compress(this.contentData.GetBuffer(), contentLength);
-                compressor.FlushOutput();
-            }
-
-            int compressedSize = (int)base.OutStream.Length;
-            int uncompressedSize = XnbPrologueSize + contentLength;
-
-            if (compressedSize < uncompressedSize)
-            {
-                base.OutStream.Position = XnbFileSizeOffset;
-                this.Write(compressedSize);
-            }
-            else
-            {
-                this.compressContent = false;
-                base.OutStream.SetLength(XnbVersionOffset);
-                base.OutStream.Position = XnbVersionOffset;
-                this.WriteUncompressedOutput();
-            }
         }
 
         private void WriteVersionNumber()
